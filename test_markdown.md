@@ -1,4 +1,4 @@
-## Inline C# Code
+# Inline C# Code
 
 Here's some inline C# code: `var name = "Julius";`
 
