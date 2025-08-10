@@ -3,10 +3,13 @@
 
 int main() {
     // std::string name;
+    int number = 5; 
     std::string name;
     std::cout << "Enter your name: ";
     std::getline(std::cin, name);
-    std::cout << "Hello, " << name << "!" << std::endl;
+    for (int i = 0; i < number; ++i) {
+      std::cout << "Hello, " << name << "!" << std::endl;
+    }
     return 0;
 }
 // This program prompts the user for their name and greets them.

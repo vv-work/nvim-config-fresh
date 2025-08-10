@@ -4,9 +4,28 @@
 **This repo is supposed to be used as config by NvChad users!**
 *italic* 
 
-```csharp
-void some()
+## 
+
+- [ ] supposed
+- [ ] other 
+
+![NvChad](https://raw.githubusercontent.com/NvChad/NvChad/main/assets/logo.png)
+
+
+```c_sharp
+public class Example
 {
+    public int x = 10;
+    public int y = 20;
+
+    public void PrintSum()
+    {
+    // This is a comment
+        for (int i = 0; i < x; i++)
+    {
+    // This is a comm
+    Console.WriteLine("Hello World");
+    }
     // This is a comment
 }
 ```
