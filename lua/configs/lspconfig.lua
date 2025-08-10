@@ -1,6 +1,6 @@
 require("nvchad.configs.lspconfig").defaults()
 
-local servers = { "html", "cssls", "omnisharp", "marksman" }
+local servers = { "html", "cssls", "omnisharp", "marksman", "clangd" }
 vim.lsp.enable(servers)
 
 -- Enhanced Pyright configuration

@@ -49,11 +49,11 @@ return {
   	"williamboman/mason.nvim",
   	opts = {
   		ensure_installed = {
-        "rust-analyzer","pyright","omnisharp",
+        "rust-analyzer","pyright","omnisharp","clangd",
   			"lua-language-server", "stylua",
   			"html-lsp", "css-lsp" , "prettier",
   			"black", "isort", "flake8", "mypy", "pylint", "autopep8",
-  			"marksman"
+  			"marksman", "clang-format", "cppcheck"
   		},
   	},
   },
@@ -66,7 +66,7 @@ return {
        "html", "css", "c_sharp", "python",
        "markdown", "markdown_inline",
        "javascript", "typescript", "tsx", "json",
-       "bash", "regex", "sql"
+       "bash", "regex", "sql", "cpp", "c"
   		},
       highlight = {
         enable = true,

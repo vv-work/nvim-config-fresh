@@ -2,6 +2,8 @@ local options = {
   formatters_by_ft = {
     lua = { "stylua" },
     python = { "black", "isort" },
+    cpp = { "clang-format" },
+    c = { "clang-format" },
     -- css = { "prettier" },
     -- html = { "prettier" },
   },
