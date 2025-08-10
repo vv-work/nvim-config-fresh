@@ -1,22 +1,11 @@
+local keymaps = require "custom.keymaps"
+
 return {
   -- tmux and copilot plugins
     {
       "christoomey/vim-tmux-navigator",
-      cmd = {
-        "TmuxNavigateLeft",
-        "TmuxNavigateDown",
-        "TmuxNavigateUp",
-        "TmuxNavigateRight",
-        "TmuxNavigatePrevious",
-        "TmuxNavigatorProcessList",
-      },
-      keys = {
-        { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
-        { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
-        { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
-        { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
-        { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
-      },
+      cmd = keymaps.tmux_commands,
+      keys = keymaps.tmux_navigator,
     },
     {
       "github/copilot.vim",
@@ -26,7 +15,7 @@ return {
   {
     "stevearc/conform.nvim",
     -- event = 'BufWritePre', -- uncomment for format on save
-    opts = require "configs.conform",
+    opts = require "custom.formatters",
   },
 
   -- These are some examples, uncomment them if you want to see them work!
@@ -47,41 +36,18 @@ return {
   --
   {
   	"williamboman/mason.nvim",
-  	opts = {
-  		ensure_installed = {
-        "rust-analyzer","pyright","omnisharp","clangd",
-  			"lua-language-server", "stylua",
-  			"html-lsp", "css-lsp" , "prettier",
-  			"black", "isort", "flake8", "mypy", "pylint", "autopep8",
-  			"marksman", "clang-format", "cppcheck"
-  		},
-  	},
+  	opts = require "custom.mason",
   },
   --
   {
   	"nvim-treesitter/nvim-treesitter",
-  	opts = {
-  		ensure_installed = {
-  		 "vim", "lua", "vimdoc",
-       "html", "css", "c_sharp", "python",
-       "markdown", "markdown_inline",
-       "javascript", "typescript", "tsx", "json",
-       "bash", "regex", "sql", "cpp", "c"
-  		},
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = { "markdown" },
-      },
-      indent = {
-        enable = true,
-      },
-  	},
+  	opts = require "custom.treesitter",
   },
 
   -- markdown preview
   {
     "iamcco/markdown-preview.nvim",
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    cmd = keymaps.markdown_commands,
     ft = { "markdown" },
     build = function() vim.fn["mkdp#util#install"]() end,
   },

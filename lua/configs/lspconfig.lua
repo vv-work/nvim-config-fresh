@@ -1,20 +1,11 @@
 require("nvchad.configs.lspconfig").defaults()
 
-local servers = { "html", "cssls", "omnisharp", "marksman", "clangd" }
-vim.lsp.enable(servers)
+local lsp_settings = require "custom.lsp"
+
+-- Enable configured LSP servers
+vim.lsp.enable(lsp_settings.servers)
 
 -- Enhanced Pyright configuration
-require("lspconfig").pyright.setup {
-  settings = {
-    python = {
-      analysis = {
-        autoSearchPaths = true,
-        diagnosticMode = "workspace",
-        useLibraryCodeForTypes = true,
-        typeCheckingMode = "basic"
-      }
-    }
-  }
-}
+require("lspconfig").pyright.setup(lsp_settings.pyright)
 
 -- read :h vim.lsp.config for changing options of lsp servers 
