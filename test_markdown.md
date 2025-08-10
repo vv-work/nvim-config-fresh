@@ -1,6 +1,5 @@
 # Multi-Language Code Testing
 
-
 ## Inline Code Examples
 - C#: `var name = "Julius";`
 - C++: `std::string name = "Julius";`
@@ -9,6 +8,7 @@
 ## C# Code Block
 
 ```c_sharp
+
 void SomeMethod()
 {
     Console.WriteLine("Hello World!");
