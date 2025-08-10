@@ -1,10 +1,11 @@
 -- Formatter configurations for conform.nvim
+-- Note: C/C++ formatting is handled by null-ls for better integration
 return {
   formatters_by_ft = {
     lua = { "stylua" },
     python = { "black", "isort" },
-    cpp = { "clang-format" },
-    c = { "clang-format" },
+    -- cpp = { "clang-format" }, -- Handled by null-ls
+    -- c = { "clang-format" }, -- Handled by null-ls
     -- css = { "prettier" },
     -- html = { "prettier" },
   },

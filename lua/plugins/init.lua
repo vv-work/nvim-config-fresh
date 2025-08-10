@@ -1,4 +1,4 @@
-local keymaps = require "custom.keymaps"
+local keymaps = require "configs.keymaps"
 
 return {
   -- tmux and copilot plugins
@@ -15,16 +15,9 @@ return {
   {
     "stevearc/conform.nvim",
     -- event = 'BufWritePre', -- uncomment for format on save
-    opts = require "custom.formatters",
+    opts = require "configs.formatters",
   },
 
-  -- These are some examples, uncomment them if you want to see them work!
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   config = function()
-  --     require "configs.lspconfig"
-  --   end,
-  -- },
 
   {
     "neovim/nvim-lspconfig",
@@ -36,12 +29,12 @@ return {
   --
   {
   	"williamboman/mason.nvim",
-  	opts = require "custom.mason",
+  	opts = require "configs.mason",
   },
   --
   {
   	"nvim-treesitter/nvim-treesitter",
-  	opts = require "custom.treesitter",
+  	opts = require "configs.treesitter",
   },
 
   -- markdown preview
@@ -55,13 +48,4 @@ return {
   -- test new blink
   { import = "nvchad.blink.lazyspec" },
 
-  -- {
-  -- 	"nvim-treesitter/nvim-treesitter",
-  -- 	opts = {
-  -- 		ensure_installed = {
-  -- 			"vim", "lua", "vimdoc",
-  --      "html", "css"
-  -- 		},
-  -- 	},
-  -- },
 }

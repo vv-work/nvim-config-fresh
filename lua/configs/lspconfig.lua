@@ -1,6 +1,6 @@
 require("nvchad.configs.lspconfig").defaults()
 
-local lsp_settings = require "custom.lsp"
+local lsp_settings = require "configs.lsp"
 
 -- Enable configured LSP servers
 vim.lsp.enable(lsp_settings.servers)
