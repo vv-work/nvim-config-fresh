@@ -1,11 +1,17 @@
 return {
   {
+    "jose-elias-alvarez/null-ls.nvim",
+    event = "VeryLazy",
+    opts = function()
+      return require(".configs.null-ls")
+    end,
+  },
+  {
     "christoomey/vim-tmux-navigator",
     lazy = false,
   },
   {
-    "github/copilot.vim",
-    lazy = false,
+    "github/copilot.vim", lazy = false,
   },
 
   {
