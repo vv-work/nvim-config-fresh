@@ -34,4 +34,7 @@ require "autocmds"
 
 vim.schedule(function()
   require "mappings"
+  
+  -- Setup markdown code block language aliases
+  require("configs.markdown-highlight").setup()
 end)
