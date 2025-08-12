@@ -4,6 +4,7 @@ return {
   formatters_by_ft = {
     lua = { "stylua" },
     python = { "black", "isort" },
+    markdown = { "prettier" },
     -- cpp = { "clang-format" }, -- Handled by null-ls
     -- c = { "clang-format" }, -- Handled by null-ls
     -- css = { "prettier" },
