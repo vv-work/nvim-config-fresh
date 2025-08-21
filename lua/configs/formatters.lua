@@ -5,6 +5,11 @@ return {
     lua = { "stylua" },
     python = { "black", "isort" },
     markdown = { "prettier" },
+    javascript = { "prettier" },
+    javascriptreact = { "prettier" },
+    typescript = { "prettier" },
+    typescriptreact = { "prettier" },
+    json = { "prettier" },
     -- cpp = { "clang-format" }, -- Handled by null-ls
     -- c = { "clang-format" }, -- Handled by null-ls
     -- css = { "prettier" },

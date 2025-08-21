@@ -2,7 +2,7 @@
 local M = {}
 
 -- List of LSP servers to enable
-M.servers = { "html", "cssls", "omnisharp", "marksman", "clangd" }
+M.servers = { "html", "cssls", "omnisharp", "marksman", "clangd", "ts_ls", "jsonls" }
 
 -- Enhanced Pyright configuration
 M.pyright = {
