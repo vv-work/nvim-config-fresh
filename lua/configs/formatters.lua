@@ -18,8 +18,17 @@ return {
     less = { "prettier" },
     html = { "prettier" },
     yaml = { "prettier" },
-    -- cpp = { "clang-format" }, -- Handled by null-ls
-    -- c = { "clang-format" }, -- Handled by null-ls
+    cpp = { "clang-format" },
+    c = { "clang-format" },
+    cuda = { "clang-format" },
+    glsl = { "clang-format" },
+    vert = { "clang-format" },
+    frag = { "clang-format" },
+    geom = { "clang-format" },
+    tesc = { "clang-format" },
+    tese = { "clang-format" },
+    comp = { "clang-format" },
+    cmake = { "cmake_format" }
   },
 
   formatters = {

@@ -14,6 +14,7 @@ return {
     "vtsls", -- Enhanced TypeScript/JavaScript LSP
     "jsonls",
     "emmet-ls",
+    "glsl_analyzer", -- GLSL language server
     
     -- Formatters
     "stylua",
@@ -21,6 +22,7 @@ return {
     "black",
     "isort",
     "clang-format",
+    "cmake-format", -- CMake formatter
     
     -- Linters and tools
     "flake8",
@@ -28,6 +30,12 @@ return {
     "pylint",
     "autopep8",
     "cppcheck",
+    "clang-tidy", -- C++ static analysis
+    "cmake-language-server", -- CMake support
+    "codelldb", -- C++ debugger
+    "gdb", -- GNU debugger
+    "bear", -- Build system integration
+    "cpplint", -- C++ style checker
     "eslint_d",
     "biome", -- Fast JavaScript/TypeScript linter and formatter
     "js-debug-adapter", -- JavaScript/TypeScript debugger

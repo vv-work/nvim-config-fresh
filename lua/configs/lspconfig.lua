@@ -20,4 +20,13 @@ require("lspconfig").emmet_ls.setup(lsp_settings.emmet_ls)
 -- Enhanced JSON LSP configuration
 require("lspconfig").jsonls.setup(lsp_settings.jsonls)
 
+-- GLSL Analyzer configuration
+require("lspconfig").glsl_analyzer.setup(lsp_settings.glsl_analyzer)
+
+-- Enhanced clangd configuration for C++
+require("lspconfig").clangd.setup(lsp_settings.clangd)
+
+-- CMake LSP configuration
+require("lspconfig").cmake.setup(lsp_settings.cmake)
+
 -- read :h vim.lsp.config for changing options of lsp servers 

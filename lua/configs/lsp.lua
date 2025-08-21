@@ -2,7 +2,7 @@
 local M = {}
 
 -- List of LSP servers to enable
-M.servers = { "html", "cssls", "omnisharp", "marksman", "clangd", "vtsls", "jsonls", "emmet_ls" }
+M.servers = { "html", "cssls", "omnisharp", "marksman", "clangd", "vtsls", "jsonls", "emmet_ls", "glsl_analyzer", "cmake" }
 
 -- Enhanced Pyright configuration
 M.pyright = {
@@ -124,6 +124,71 @@ M.jsonls = {
     json = {
       validate = { enable = true },
     },
+  },
+}
+
+-- GLSL Analyzer configuration
+M.glsl_analyzer = {
+  filetypes = { "glsl", "vert", "frag", "geom", "tesc", "tese", "comp" },
+  cmd = { "glsl_analyzer" },
+  settings = {
+    glslAnalyzer = {
+      diagnostics = true,
+      hover = true,
+      completion = true,
+      formatting = true,
+    },
+  },
+}
+
+-- Enhanced clangd configuration for C++
+M.clangd = {
+  cmd = {
+    "clangd",
+    "--background-index",
+    "--clang-tidy",
+    "--header-insertion=iwyu",
+    "--completion-style=detailed",
+    "--function-arg-placeholders",
+    "--fallback-style=llvm",
+    "--all-scopes-completion",
+    "--cross-file-rename",
+    "--log=verbose",
+    "--enable-config",
+    "--offset-encoding=utf-16",
+  },
+  init_options = {
+    usePlaceholders = true,
+    completeUnimported = true,
+    clangdFileStatus = true,
+  },
+  filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+  root_dir = function(fname)
+    return require("lspconfig.util").root_pattern(
+      ".clangd",
+      ".clang-tidy",
+      ".clang-format",
+      "compile_commands.json",
+      "compile_flags.txt",
+      "configure.ac",
+      ".git"
+    )(fname)
+  end,
+  capabilities = {
+    textDocument = {
+      completion = {
+        editsNearCursor = true,
+      },
+    },
+    offsetEncoding = { "utf-16" },
+  },
+}
+
+-- CMake LSP configuration
+M.cmake = {
+  filetypes = { "cmake" },
+  init_options = {
+    buildDirectory = "build",
   },
 }
 

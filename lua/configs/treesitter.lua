@@ -25,7 +25,16 @@ return {
     "regex",
     "sql",
     "cpp",
-    "c"
+    "c",
+    "glsl", -- GLSL shader language
+    "hlsl", -- HLSL shader language  
+    "cmake", -- CMake build system
+    "cuda", -- CUDA
+    "rust", -- Rust language
+    "go", -- Go language
+    "dockerfile", -- Docker
+    "ini", -- INI files
+    "gitignore" -- Git ignore files
   },
   highlight = {
     enable = true,
