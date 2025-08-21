@@ -2,7 +2,7 @@
 local M = {}
 
 -- List of LSP servers to enable
-M.servers = { "html", "cssls", "omnisharp", "marksman", "clangd", "ts_ls", "jsonls" }
+M.servers = { "html", "cssls", "omnisharp", "marksman", "clangd", "vtsls", "jsonls", "emmet_ls" }
 
 -- Enhanced Pyright configuration
 M.pyright = {
@@ -51,6 +51,80 @@ M.omnisharp = {
       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cf', '<cmd>lua vim.lsp.buf.format()<CR>', {noremap=true, silent=true})
     end
   end,
+}
+
+-- Enhanced VTSLS (TypeScript/JavaScript) configuration
+M.vtsls = {
+  settings = {
+    complete_function_calls = true,
+    vtsls = {
+      enableMoveToFileCodeAction = true,
+      autoUseWorkspaceTsdk = true,
+      experimental = {
+        completion = {
+          enableServerSideFuzzyMatch = true,
+        },
+      },
+    },
+    typescript = {
+      updateImportsOnFileMove = { enabled = "always" },
+      suggest = {
+        completeFunctionCalls = true,
+      },
+      inlayHints = {
+        enumMemberValues = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        parameterNames = { enabled = "literals" },
+        parameterTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        variableTypes = { enabled = false },
+      },
+    },
+    javascript = {
+      updateImportsOnFileMove = { enabled = "always" },
+      suggest = {
+        completeFunctionCalls = true,
+      },
+      inlayHints = {
+        enumMemberValues = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        parameterNames = { enabled = "literals" },
+        parameterTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        variableTypes = { enabled = false },
+      },
+    },
+  },
+  filetypes = {
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "svelte",
+  },
+}
+
+-- Emmet LSP for HTML/CSS autocompletion
+M.emmet_ls = {
+  filetypes = { 
+    "html", 
+    "css", 
+    "scss", 
+    "javascriptreact", 
+    "typescriptreact", 
+    "vue", 
+    "svelte" 
+  },
+}
+
+-- Enhanced JSON LSP configuration
+M.jsonls = {
+  settings = {
+    json = {
+      validate = { enable = true },
+    },
+  },
 }
 
 return M

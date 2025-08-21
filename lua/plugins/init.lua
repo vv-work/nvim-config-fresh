@@ -59,6 +59,74 @@ return {
     end,
   },
 
+  -- TypeScript/JavaScript specific plugins
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+    opts = {
+      settings = {
+        separate_diagnostic_server = true,
+        publish_diagnostic_on = "insert_leave",
+        expose_as_code_action = {},
+        tsserver_path = nil,
+        tsserver_plugins = {},
+        tsserver_max_memory = "auto",
+        tsserver_format_options = {},
+        tsserver_file_preferences = {
+          includeInlayParameterNameHints = "all",
+          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayVariableTypeHints = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayEnumMemberValueHints = true,
+        },
+        tsserver_locale = "en",
+      },
+    },
+  },
+
+  {
+    "b0o/schemastore.nvim",
+    lazy = true,
+    version = false,
+  },
+
+  {
+    "windwp/nvim-ts-autotag",
+    ft = {
+      "html",
+      "javascript",
+      "typescript",
+      "javascriptreact",
+      "typescriptreact",
+      "svelte",
+      "vue",
+      "tsx",
+      "jsx",
+      "rescript",
+      "xml",
+      "php",
+      "markdown",
+      "astro",
+      "glimmer",
+      "handlebars",
+      "hbs"
+    },
+    config = function()
+      require("nvim-ts-autotag").setup()
+    end,
+  },
+
+  {
+    "nvim-pack/nvim-spectre",
+    keys = {
+      { "<leader>S", function() require("spectre").open() end, desc = "Replace in files (Spectre)" },
+    },
+    opts = {},
+  },
+
   -- test new blink
   { import = "nvchad.blink.lazyspec" },
 

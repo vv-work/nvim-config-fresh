@@ -10,6 +10,10 @@ return {
     "html-lsp",
     "css-lsp",
     "marksman",
+    "typescript-language-server",
+    "vtsls", -- Enhanced TypeScript/JavaScript LSP
+    "jsonls",
+    "emmet-ls",
     
     -- Formatters
     "stylua",
@@ -23,6 +27,9 @@ return {
     "mypy",
     "pylint",
     "autopep8",
-    "cppcheck"
+    "cppcheck",
+    "eslint_d",
+    "biome", -- Fast JavaScript/TypeScript linter and formatter
+    "js-debug-adapter", -- JavaScript/TypeScript debugger
   }
 }
