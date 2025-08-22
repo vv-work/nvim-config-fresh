@@ -1,6 +1,22 @@
 -- Enhanced filetype detection for shaders and other languages
+-- Override built-in C# detection to avoid '#' character issues
+
+-- First, completely disable the built-in c# filetype detection
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "c#",
+  callback = function()
+    -- Immediately change from c# to cs to prevent any issues
+    vim.bo.filetype = "cs"
+    vim.bo.syntax = "cs"
+    vim.bo.commentstring = "// %s"
+  end,
+})
+
 vim.filetype.add({
   extension = {
+    -- C# files (use 'cs' instead of 'c#' to avoid vim special character issues)
+    cs = "cs",
+    
     -- GLSL shader files
     glsl = "glsl",
     vert = "glsl",
@@ -60,4 +76,33 @@ vim.filetype.add({
     ["[Mm]akefile.*"] = "make",
     [".*%.mk$"] = "make",
   },
+})
+
+-- Explicit override for C# files to prevent '#' character issues
+vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"}, {
+  pattern = "*.cs",
+  callback = function()
+    -- Set filetype first
+    vim.bo.filetype = "cs"
+    -- Ensure syntax is also cs, not c#
+    vim.bo.syntax = "cs"
+    -- Set commentstring explicitly
+    vim.bo.commentstring = "// %s"
+  end,
+})
+
+-- Additional safety: override any FileType autocmd that might interfere
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "cs",
+  callback = function()
+    -- Use vim.schedule to run after other FileType autocmds
+    vim.schedule(function()
+      -- Double-check syntax setting
+      if vim.bo.syntax ~= "cs" then
+        vim.bo.syntax = "cs"
+      end
+      -- Ensure commentstring is correct
+      vim.bo.commentstring = "// %s"
+    end)
+  end,
 })

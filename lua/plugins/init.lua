@@ -635,6 +635,38 @@ return {
     end,
   },
 
+  -- Comment plugin for better commenting support
+  {
+    "numToStr/Comment.nvim",
+    lazy = false,
+    config = function()
+      require("Comment").setup({
+        -- Add mapping to disable/enable comment
+        toggler = {
+          line = '<leader>/',
+          block = '<leader>bc',
+        },
+        opleader = {
+          line = '<leader>/',
+          block = '<leader>bc',
+        },
+        extra = {
+          above = '<leader>cO',
+          below = '<leader>co',
+          eol = '<leader>cA',
+        },
+        mappings = {
+          basic = true,
+          extra = true,
+        },
+        -- Custom filetypes
+        ft = {
+          cs = "// %s",
+        },
+      })
+    end,
+  },
+
   -- test new blink
   { import = "nvchad.blink.lazyspec" },
 
