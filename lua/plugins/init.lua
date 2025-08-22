@@ -1,16 +1,117 @@
 local keymaps = require "configs.keymaps"
 
 return {
+  -- Catppuccin theme (Mocha flavor)
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("catppuccin").setup({
+        flavour = "mocha",
+        term_colors = true,
+        integrations = {
+          cmp = true,
+          gitsigns = true,
+          nvimtree = true,
+          treesitter = true,
+          telescope = true,
+          notify = true,
+          which_key = true,
+          markdown = true,
+          mason = true,
+          dap = true,
+        },
+      })
+      -- To use plugin colorscheme instead of NVChad base46, uncomment:
+      -- vim.cmd.colorscheme("catppuccin-mocha")
+    end,
+  },
   -- tmux and copilot plugins
     {
       "christoomey/vim-tmux-navigator",
       cmd = keymaps.tmux_commands,
       keys = keymaps.tmux_navigator,
     },
-    {
-      "github/copilot.vim",
-      lazy = false,
+  -- GitHub Copilot with better integration
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        panel = {
+          enabled = false, -- Disable to avoid conflicts with blink.cmp
+          auto_refresh = false,
+        },
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          accept = false, -- We'll handle Tab manually below
+          dismiss = false,
+          debounce = 75,
+          keymap = {
+            accept = "<Tab>", -- Tab to accept suggestion
+            accept_word = "<C-]>", -- Ctrl+] to accept one word
+            accept_line = false,
+            next = "<C-n>", -- Ctrl+n for next suggestion  
+            prev = "<C-p>", -- Ctrl+p for previous suggestion
+            dismiss = "<C-e>", -- Ctrl+e to dismiss
+          },
+        },
+        filetypes = {
+          yaml = true,
+          markdown = true,
+          help = false,
+          gitcommit = true,
+          gitrebase = false,
+          hgcommit = false,
+          svn = false,
+          cvs = false,
+          [".."] = false,
+        },
+        copilot_node_command = "node", -- Use Node.js binary
+        server_opts_overrides = {},
+      })
+    end,
+  },
+  
+  -- Copilot integration for blink.cmp
+  {
+    "zbirenbaum/copilot-cmp",
+    dependencies = {
+      "zbirenbaum/copilot.lua",
     },
+    config = function()
+      require("copilot_cmp").setup()
+    end,
+  },
+
+  -- Copilot Chat
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "canary",
+    dependencies = {
+      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
+      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+    },
+    opts = {
+      debug = false, -- Enable debugging
+      -- See Configuration section for rest
+    },
+    keys = {
+      { "<leader>cp", function() require("CopilotChat").toggle() end, desc = "Toggle Copilot Chat" },
+      { "<leader>cpo", function() require("CopilotChat").open() end, desc = "Open Copilot Chat" },
+      { "<leader>cpc", function() require("CopilotChat").close() end, desc = "Close Copilot Chat" },
+      { "<leader>cpr", function() require("CopilotChat").reset() end, desc = "Reset Copilot Chat" },
+      { "<leader>cpe", "<cmd>CopilotChatExplain<cr>", desc = "Explain code", mode = { "n", "v" } },
+      { "<leader>cpt", "<cmd>CopilotChatTests<cr>", desc = "Generate tests", mode = { "n", "v" } },
+      { "<leader>cpf", "<cmd>CopilotChatFix<cr>", desc = "Fix code", mode = { "n", "v" } },
+      { "<leader>cpx", "<cmd>CopilotChatOptimize<cr>", desc = "Optimize code", mode = { "n", "v" } },
+      { "<leader>cpd", "<cmd>CopilotChatDocs<cr>", desc = "Generate docs", mode = { "n", "v" } },
+    },
+  },
 
   {
     "stevearc/conform.nvim",
@@ -659,10 +760,14 @@ return {
           basic = true,
           extra = true,
         },
-        -- Custom filetypes
-        ft = {
-          cs = "// %s",
-        },
+        -- Custom filetypes and pre_hook to bypass Neovim's c# ftplugin lookup
+        ft = { cs = "// %s" },
+        pre_hook = function(ctx)
+          local ft = vim.bo.filetype
+          if ft == "cs" or ft == "c#" then
+            return "// %s"
+          end
+        end,
       })
     end,
   },
@@ -691,7 +796,56 @@ return {
     end,
   },
 
-  -- test new blink
-  { import = "nvchad.blink.lazyspec" },
+  -- Enhanced blink.cmp with Copilot integration
+  { 
+    import = "nvchad.blink.lazyspec",
+    opts = function(_, opts)
+      opts.sources = opts.sources or {}
+      opts.sources.default = opts.sources.default or { "lsp", "path", "snippets", "buffer" }
+      table.insert(opts.sources.default, "copilot")
+      
+      opts.sources.providers = opts.sources.providers or {}
+      opts.sources.providers.copilot = {
+        name = "copilot",
+        module = "copilot_cmp",
+        score_offset = 100,
+        async = true,
+      }
+      
+      -- Configure keymaps to use Enter for blink.cmp, leave Tab for Copilot
+      opts.keymap = opts.keymap or {}
+      opts.keymap["<CR>"] = { "accept", "fallback" }
+      opts.keymap["<Tab>"] = { "fallback" } -- Let Tab go to Copilot
+      opts.keymap["<S-Tab>"] = { "fallback" } -- Remove Shift+Tab from blink too
+      opts.keymap["<Up>"] = { "select_prev", "fallback" }
+      opts.keymap["<Down>"] = { "select_next", "fallback" }
+      
+      return opts
+    end,
+  },
+  
+  -- Claude Code integration
+  {
+    "greggh/claude-code.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("claude-code").setup({
+        -- Toggle Claude Code with this keymap
+        toggle_key = "<leader>ai",
+        -- Position of Claude Code window
+        position = "right",
+        -- Size of Claude Code window
+        size = 80,
+        -- Auto reload files when Claude Code modifies them
+        auto_reload = true,
+        -- Command line arguments to pass to claude-code
+        claude_args = {},
+      })
+    end,
+    keys = {
+      { "<leader>ai", function() require("claude-code").toggle() end, desc = "Toggle Claude Code" },
+      { "<leader>an", function() require("claude-code").new_conversation() end, desc = "New Claude conversation" },
+    },
+  },
 
 }

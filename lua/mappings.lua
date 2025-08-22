@@ -26,3 +26,32 @@ map("i", "jk", "<ESC>")
 -- Insert mode:
 -- <C-g>s<char> - Add surroundings
 -- <C-g>S<char> - Add surroundings on new lines
+
+-- AI Assistant Keymaps
+-- Claude Code Integration:
+-- <leader>ai - Toggle Claude Code window
+-- <leader>an - Start new Claude conversation
+
+-- Completion Keymaps:
+-- BLINK.CMP (completion menu):
+-- Enter - Accept completion from menu
+-- Up/Down arrows - Navigate completions
+--
+-- GITHUB COPILOT (inline suggestions):
+-- Tab - Accept full Copilot suggestion
+-- Ctrl+] - Accept one word from suggestion
+-- Ctrl+n - Next suggestion, Ctrl+p - Previous suggestion
+-- Ctrl+e - Dismiss suggestion
+-- Copilot suggestions also appear in blink.cmp completion menu
+-- Use :Copilot to manage authentication and settings
+-- Use :Copilot status to check connection status
+--
+-- COPILOT CHAT:
+-- <leader>cp - Toggle Copilot Chat
+-- <leader>cpe - Explain code (normal/visual mode)
+-- <leader>cpt - Generate tests (normal/visual mode)
+-- <leader>cpf - Fix code (normal/visual mode)
+-- <leader>cpx - Optimize code (normal/visual mode)
+-- <leader>cpd - Generate docs (normal/visual mode)
+-- <leader>cpo - Open chat, <leader>cpc - Close chat
+-- <leader>cpr - Reset chat history

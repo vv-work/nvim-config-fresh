@@ -56,7 +56,8 @@ Uses lazy.nvim as the package manager. NvChad itself is loaded as a plugin with 
 
 ### Key Integrations
 - **Tmux**: vim-tmux-navigator for seamless pane navigation
-- **GitHub Copilot**: github/copilot.vim
+- **GitHub Copilot**: zbirenbaum/copilot.lua with blink.cmp integration
+- **Claude Code**: greggh/claude-code.nvim for AI assistance
 - **Markdown Preview**: iamcco/markdown-preview.nvim
 - **TypeScript Tools**: pmizio/typescript-tools.nvim with enhanced inlay hints
 - **C++ Development**: cmake-tools.nvim for CMake integration
@@ -100,6 +101,11 @@ Uses lazy.nvim as the package manager. NvChad itself is loaded as a plugin with 
 - **Markdown Preview**: `:MarkdownPreview` (start preview in browser)
 - **Global Search/Replace**: `<leader>S` (open Spectre for project-wide find/replace)
 - **Format Code**: `<leader>fm` (format current buffer with conform.nvim)
+
+### AI Assistant Commands
+- **Claude Code**: `<leader>ai` (toggle Claude Code), `<leader>an` (new conversation)
+- **GitHub Copilot**: `:Copilot` (manage), `:Copilot status` (check status)
+- **Copilot Auth**: `:Copilot auth` (authenticate), `:Copilot disable` (disable)
 
 ### Key File Locations
 - **Plugin Specs**: `lua/plugins/init.lua` (add new plugins here)

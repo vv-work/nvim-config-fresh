@@ -1,0 +1,8 @@
+WRN 2025-08-22T03:58:00.115 ?.69347    server_start:193: Failed to start server: operation not permitted: /var/folders/zn/1mrk5k9d77l9bylfbz5ks2wr0000gn/T/nvim.501/cBhOJc/nvim.69347.0
+WRN 2025-08-22T03:58:06.035 ?.69382    server_start:193: Failed to start server: operation not permitted: /var/folders/zn/1mrk5k9d77l9bylfbz5ks2wr0000gn/T/nvim.501/9Fgnt9/nvim.69382.0
+WRN 2025-08-22T03:59:05.016 ?.69661    server_start:193: Failed to start server: operation not permitted: /var/folders/zn/1mrk5k9d77l9bylfbz5ks2wr0000gn/T/nvim.501/H7hSfj/nvim.69661.0
+WRN 2025-08-22T03:59:11.575 ?.69704    server_start:193: Failed to start server: operation not permitted: /var/folders/zn/1mrk5k9d77l9bylfbz5ks2wr0000gn/T/nvim.501/TGbQXS/nvim.69704.0
+WRN 2025-08-22T04:02:26.847 ?.70621    server_start:193: Failed to start server: operation not permitted: /var/folders/zn/1mrk5k9d77l9bylfbz5ks2wr0000gn/T/nvim.501/ivaKN5/nvim.70621.0
+WRN 2025-08-22T04:02:36.366 ?.70704    server_start:193: Failed to start server: operation not permitted: /var/folders/zn/1mrk5k9d77l9bylfbz5ks2wr0000gn/T/nvim.501/S2vWOV/nvim.70704.0
+WRN 2025-08-22T04:02:44.397 ?.70741    server_start:193: Failed to start server: operation not permitted: /var/folders/zn/1mrk5k9d77l9bylfbz5ks2wr0000gn/T/nvim.501/Swqrfk/nvim.70741.0
+WRN 2025-08-22T04:03:01.134 ?.70843    server_start:193: Failed to start server: operation not permitted: /var/folders/zn/1mrk5k9d77l9bylfbz5ks2wr0000gn/T/nvim.501/IXMYil/nvim.70843.0

@@ -14,5 +14,35 @@ return {
     "github/copilot.vim", lazy = false,
   },
 
+  -- Catppuccin theme (Mocha flavor)
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("catppuccin").setup({
+        flavour = "mocha",
+        transparent_background = false,
+        term_colors = true,
+        integrations = {
+          cmp = true,
+          gitsigns = true,
+          nvimtree = true,
+          treesitter = true,
+          telescope = true,
+          notify = true,
+          which_key = true,
+          markdown = true,
+          mason = true,
+          dap = true,
+        },
+      })
+      -- NVChad base46 applies its own colorscheme; we only configure flavour.
+      -- If you prefer the plugin colorscheme directly, uncomment:
+      -- vim.cmd.colorscheme("catppuccin-mocha")
+    end,
+  },
+
 
 }
