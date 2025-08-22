@@ -29,4 +29,7 @@ require("lspconfig").clangd.setup(lsp_settings.clangd)
 -- CMake LSP configuration
 require("lspconfig").cmake.setup(lsp_settings.cmake)
 
+-- Enhanced Rust Analyzer configuration
+require("lspconfig").rust_analyzer.setup(lsp_settings.rust_analyzer)
+
 -- read :h vim.lsp.config for changing options of lsp servers 

@@ -28,7 +28,9 @@ return {
     tesc = { "clang-format" },
     tese = { "clang-format" },
     comp = { "clang-format" },
-    cmake = { "cmake_format" }
+    cmake = { "cmake_format" },
+    rust = { "rustfmt" },
+    toml = { "taplo" }
   },
 
   formatters = {

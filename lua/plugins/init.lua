@@ -217,8 +217,94 @@ return {
         },
       }
 
+      -- Enhanced Rust debugging configuration
+      dap.configurations.rust = {
+        {
+          name = "Launch Rust Binary",
+          type = "codelldb",
+          request = "launch",
+          program = function()
+            -- Try to find the binary in target/debug/
+            local cwd = vim.fn.getcwd()
+            local cargo_toml = cwd .. "/Cargo.toml"
+            
+            if vim.fn.filereadable(cargo_toml) == 1 then
+              -- Read package name from Cargo.toml
+              local cargo_content = vim.fn.readfile(cargo_toml)
+              local package_name = nil
+              for _, line in ipairs(cargo_content) do
+                local name_match = line:match('^name%s*=%s*"([^"]+)"')
+                if name_match then
+                  package_name = name_match
+                  break
+                end
+              end
+              
+              if package_name then
+                local debug_path = cwd .. "/target/debug/" .. package_name
+                if vim.fn.executable(debug_path) == 1 then
+                  return debug_path
+                end
+              end
+            end
+            
+            -- Fallback to manual input
+            return vim.fn.input("Path to executable: ", cwd .. "/target/debug/", "file")
+          end,
+          cwd = "${workspaceFolder}",
+          stopOnEntry = false,
+          args = {},
+          runInTerminal = false,
+        },
+        {
+          name = "Launch Rust Binary (with args)",
+          type = "codelldb",
+          request = "launch",
+          program = function()
+            local cwd = vim.fn.getcwd()
+            local cargo_toml = cwd .. "/Cargo.toml"
+            
+            if vim.fn.filereadable(cargo_toml) == 1 then
+              local cargo_content = vim.fn.readfile(cargo_toml)
+              local package_name = nil
+              for _, line in ipairs(cargo_content) do
+                local name_match = line:match('^name%s*=%s*"([^"]+)"')
+                if name_match then
+                  package_name = name_match
+                  break
+                end
+              end
+              
+              if package_name then
+                local debug_path = cwd .. "/target/debug/" .. package_name
+                if vim.fn.executable(debug_path) == 1 then
+                  return debug_path
+                end
+              end
+            end
+            
+            return vim.fn.input("Path to executable: ", cwd .. "/target/debug/", "file")
+          end,
+          cwd = "${workspaceFolder}",
+          stopOnEntry = false,
+          args = function()
+            local args_str = vim.fn.input("Arguments: ")
+            return vim.split(args_str, " ", { trimempty = true })
+          end,
+          runInTerminal = false,
+        },
+        {
+          name = "Attach to Rust Process",
+          type = "codelldb",
+          request = "attach",
+          pid = function()
+            return require("dap.utils").pick_process()
+          end,
+          args = {},
+        },
+      }
+
       dap.configurations.c = dap.configurations.cpp
-      dap.configurations.rust = dap.configurations.cpp
     end,
     keys = {
       { "<F5>", function() require("dap").continue() end, desc = "Debug: Start/Continue" },
@@ -283,6 +369,270 @@ return {
       "hrsh7th/vim-vsnip",
     },
     ft = { "c", "cpp", "objc", "objcpp", "cuda" },
+  },
+
+  -- Enhanced Rust Development Plugins
+  {
+    "mrcjkb/rustaceanvim",
+    version = "^5",
+    lazy = false,
+    ft = { "rust" },
+    config = function()
+      vim.g.rustaceanvim = {
+        -- Plugin configuration
+        tools = {
+          -- Automatically set inlay hints (type hints)
+          inlay_hints = {
+            auto = true,
+            only_current_line = false,
+            show_parameter_hints = true,
+            parameter_hints_prefix = "<- ",
+            other_hints_prefix = "=> ",
+            max_len_align = false,
+            max_len_align_padding = 1,
+            right_align = false,
+            right_align_padding = 7,
+            highlight = "Comment",
+          },
+          -- Options same as lsp hover / vim.lsp.util.open_floating_preview()
+          hover_actions = {
+            -- the border that is used for the hover window
+            border = {
+              { "╭", "FloatBorder" },
+              { "─", "FloatBorder" },
+              { "╮", "FloatBorder" },
+              { "│", "FloatBorder" },
+              { "╯", "FloatBorder" },
+              { "─", "FloatBorder" },
+              { "╰", "FloatBorder" },
+              { "│", "FloatBorder" },
+            },
+            -- Maximal width of the hover window. Nil means no max.
+            max_width = nil,
+            -- Maximal height of the hover window. Nil means no max.
+            max_height = nil,
+            -- whether the hover action window gets automatically focused
+            auto_focus = false,
+          },
+          -- Enable / disable certain features
+          reload_workspace_from_cargo_toml = true,
+        },
+        -- LSP configuration
+        server = {
+          on_attach = function(client, bufnr)
+            -- Rust-specific keybindings
+            vim.keymap.set("n", "<leader>rr", function()
+              vim.cmd.RustLsp("run")
+            end, { desc = "Run Rust", buffer = bufnr })
+            
+            vim.keymap.set("n", "<leader>rt", function()
+              vim.cmd.RustLsp("testables")
+            end, { desc = "Run Rust Tests", buffer = bufnr })
+            
+            vim.keymap.set("n", "<leader>rd", function()
+              vim.cmd.RustLsp("debuggables")
+            end, { desc = "Debug Rust", buffer = bufnr })
+            
+            vim.keymap.set("n", "<leader>rh", function()
+              vim.cmd.RustLsp({ "hover", "actions" })
+            end, { desc = "Hover Actions", buffer = bufnr })
+            
+            vim.keymap.set("n", "<leader>re", function()
+              vim.cmd.RustLsp("explainError")
+            end, { desc = "Explain Error", buffer = bufnr })
+            
+            vim.keymap.set("n", "<leader>rc", function()
+              vim.cmd.RustLsp("openCargo")
+            end, { desc = "Open Cargo.toml", buffer = bufnr })
+            
+            vim.keymap.set("n", "<leader>rp", function()
+              vim.cmd.RustLsp("parentModule")
+            end, { desc = "Parent Module", buffer = bufnr })
+            
+            vim.keymap.set("n", "<leader>rj", function()
+              vim.cmd.RustLsp("joinLines")
+            end, { desc = "Join Lines", buffer = bufnr })
+            
+            vim.keymap.set("n", "<leader>ra", function()
+              vim.cmd.RustLsp("codeAction")
+            end, { desc = "Code Action", buffer = bufnr })
+          end,
+          default_settings = {
+            -- rust-analyzer language server configuration
+            ["rust-analyzer"] = {
+              -- Override settings from lsp.lua if needed
+              cargo = {
+                allFeatures = true,
+                loadOutDirsFromCheck = true,
+                buildScripts = {
+                  enable = true,
+                },
+              },
+              -- Add clippy lints for Rust.
+              checkOnSave = {
+                command = "cargo-clippy",
+                extraArgs = { "--all-targets", "--all-features" },
+              },
+              procMacro = {
+                enable = true,
+                ignored = {
+                  leptos_macro = {
+                    -- optional: --
+                    -- "component",
+                    "server",
+                  },
+                },
+              },
+            },
+          },
+        },
+        -- DAP configuration
+        dap = {
+          adapter = require("rustaceanvim.config").get_codelldb_adapter(
+            vim.fn.stdpath("data") .. "/mason/bin/codelldb",
+            vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/lldb/lib/liblldb"
+          ),
+        },
+      }
+    end,
+  },
+
+  {
+    "saecki/crates.nvim",
+    ft = { "toml" },
+    config = function()
+      require("crates").setup({
+        completion = {
+          cmp = {
+            enabled = true,
+          },
+        },
+        lsp = {
+          enabled = true,
+          actions = true,
+          completion = true,
+          hover = true,
+        },
+      })
+    end,
+  },
+
+  {
+    "Canop/nvim-bacon",
+    ft = { "rust" },
+    config = function()
+      require("bacon").setup()
+    end,
+  },
+
+  {
+    "rouge8/neotest-rust",
+    dependencies = {
+      "nvim-neotest/neotest",
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    ft = { "rust" },
+    config = function()
+      require("neotest").setup({
+        adapters = {
+          require("neotest-rust") {
+            args = { "--no-capture" },
+            dap_adapter = "codelldb",
+          },
+        },
+        -- Configure output window
+        output = {
+          enabled = true,
+          open_on_run = true,
+        },
+        -- Configure quickfix list
+        quickfix = {
+          enabled = false,
+        },
+        -- Configure status signs
+        status = {
+          enabled = true,
+          signs = true,
+          virtual_text = false,
+        },
+        -- Configure icons
+        icons = {
+          child_indent = "│",
+          child_prefix = "├",
+          collapsed = "─",
+          expanded = "╮",
+          failed = "✖",
+          final_child_indent = " ",
+          final_child_prefix = "╰",
+          non_collapsible = "─",
+          passed = "✓",
+          running = "⟳",
+          running_animated = { "/", "|", "\\", "-", "/", "|", "\\", "-" },
+          skipped = "ⓢ",
+          unknown = "?"
+        },
+      })
+      
+      -- Test keymaps
+      vim.keymap.set("n", "<leader>tr", function()
+        require("neotest").run.run()
+      end, { desc = "Run nearest test" })
+      
+      vim.keymap.set("n", "<leader>tf", function()
+        require("neotest").run.run(vim.fn.expand("%"))
+      end, { desc = "Run file tests" })
+      
+      vim.keymap.set("n", "<leader>ta", function()
+        require("neotest").run.run(vim.fn.getcwd())
+      end, { desc = "Run all tests" })
+      
+      vim.keymap.set("n", "<leader>ts", function()
+        require("neotest").summary.toggle()
+      end, { desc = "Toggle test summary" })
+      
+      vim.keymap.set("n", "<leader>to", function()
+        require("neotest").output.open({ enter = true, auto_close = true })
+      end, { desc = "Show test output" })
+      
+      vim.keymap.set("n", "<leader>tO", function()
+        require("neotest").output_panel.toggle()
+      end, { desc = "Toggle output panel" })
+      
+      vim.keymap.set("n", "<leader>tt", function()
+        require("neotest").run.stop()
+      end, { desc = "Stop test" })
+      
+      vim.keymap.set("n", "<leader>td", function()
+        require("neotest").run.run({strategy = "dap"})
+      end, { desc = "Debug nearest test" })
+    end,
+  },
+
+  {
+    "vuki656/package-info.nvim",
+    dependencies = { "MunifTanjim/nui.nvim" },
+    ft = { "toml" },
+    config = function()
+      require("package-info").setup({
+        colors = {
+          up_to_date = "#3C4048",
+          outdated = "#d19a66",
+        },
+        icons = {
+          enable = true,
+          style = {
+            up_to_date = "|  ",
+            outdated = "|  ",
+          },
+        },
+        autostart = true,
+        hide_up_to_date = false,
+        hide_unstable_versions = false,
+        package_manager = "cargo",
+      })
+    end,
   },
 
   -- test new blink
