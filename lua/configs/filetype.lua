@@ -1,14 +1,44 @@
 -- Enhanced filetype detection for shaders and other languages
 -- Override built-in C# detection to avoid '#' character issues
 
--- First, completely disable the built-in c# filetype detection
+-- CRITICAL: Override the core filetype system to prevent 'c#' from ever being used
+-- This prevents the runtime ftplugin loading issues with the '#' character
+
+-- Hook into the filetype detection system at the lowest level
+do
+  local original_detect = vim.filetype.detect
+  vim.filetype.detect = function(opts)
+    local result = original_detect(opts)
+    -- If the detected filetype is 'c#', change it to 'cs' immediately
+    if result == "c#" then
+      return "cs"
+    end
+    return result
+  end
+end
+
+-- Override vim.bo.filetype setter to prevent 'c#' from being set
+do
+  local bo_mt = getmetatable(vim.bo)
+  local original_newindex = bo_mt.__newindex
+  bo_mt.__newindex = function(t, key, value)
+    if key == "filetype" and value == "c#" then
+      value = "cs"
+    end
+    return original_newindex(t, key, value)
+  end
+end
+
+-- Prevent the built-in c# filetype from ever being set via autocmd
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "c#",
-  callback = function()
-    -- Immediately change from c# to cs to prevent any issues
-    vim.bo.filetype = "cs"
-    vim.bo.syntax = "cs"
-    vim.bo.commentstring = "// %s"
+  callback = function(ev)
+    vim.schedule(function()
+      -- Force change from c# to cs
+      vim.bo[ev.buf].filetype = "cs"
+      vim.bo[ev.buf].syntax = "cs" 
+      vim.bo[ev.buf].commentstring = "// %s"
+    end)
   end,
 })
 
@@ -107,18 +137,41 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Shim Neovim's filetype option resolver to avoid issues with "c#"
+-- Comprehensive override of all filetype option functions
 -- Some runtime helpers try to load ftplugin files using the raw filetype string,
 -- which breaks when a '#' character is present. Normalize to 'cs'.
 do
+  -- Override vim.filetype.get_option
   local ftmod = require "vim.filetype"
-  local orig = ftmod.get_option
+  local orig_get_option = ftmod.get_option
   ftmod.get_option = function(name, ft)
     local t = ft or vim.bo.filetype
     if t == "c#" then
       t = "cs"
     end
-    return orig(name, t)
+    return orig_get_option(name, t)
+  end
+  
+  -- Also override the internal options module used by vim._comment
+  local options_mod = require "vim.filetype.options"
+  if options_mod and options_mod.get_option then
+    local orig_options_get = options_mod.get_option
+    options_mod.get_option = function(name, ft)
+      local t = ft or vim.bo.filetype
+      if t == "c#" then
+        t = "cs"
+      end
+      return orig_options_get(name, t)
+    end
+  end
+  
+  -- Override nvim_get_option_value calls that use filetype context
+  local orig_get_option_value = vim.api.nvim_get_option_value
+  vim.api.nvim_get_option_value = function(name, opts)
+    if opts and opts.filetype and opts.filetype == "c#" then
+      opts = vim.tbl_extend("force", opts, { filetype = "cs" })
+    end
+    return orig_get_option_value(name, opts)
   end
 end
 
