@@ -143,6 +143,9 @@ return {
     "iamcco/markdown-preview.nvim",
     cmd = keymaps.markdown_commands,
     ft = { "markdown" },
+    keys = {
+      { "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>", desc = "Markdown: Preview Toggle" },
+    },
     build = function()
       vim.fn["mkdp#util#install"]()
     end,
@@ -153,7 +156,8 @@ return {
       vim.g.mkdp_refresh_slow = 0
       vim.g.mkdp_command_for_global = 0
       vim.g.mkdp_open_to_the_world = 0
-      vim.g.mkdp_browser = "/usr/bin/open"
+      -- Use macOS "open" so the plugin spawns the default browser directly
+      vim.g.mkdp_browser = "open"
       vim.g.mkdp_browserfunc = ""
       vim.g.mkdp_echo_preview_url = 1
       vim.g.mkdp_page_title = "Preview: ${name}"
