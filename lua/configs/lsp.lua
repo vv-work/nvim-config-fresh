@@ -55,6 +55,13 @@ M.omnisharp = {
 
 -- Enhanced VTSLS (TypeScript/JavaScript) configuration
 M.vtsls = {
+  on_attach = function(client, bufnr)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end,
+  root_dir = function(fname)
+    return require("lspconfig.util").root_pattern("tsconfig.json", "package.json", ".git")(fname)
+  end,
   settings = {
     complete_function_calls = true,
     vtsls = {
@@ -102,6 +109,30 @@ M.vtsls = {
     "typescriptreact",
     "vue",
     "svelte",
+  },
+}
+
+-- ESLint LSP for JS/TS diagnostics and code actions
+M.eslint = {
+  filetypes = {
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "svelte",
+  },
+  settings = {
+    workingDirectory = { mode = "auto" },
+    codeAction = {
+      disableRuleComment = { enable = true, location = "separateLine" },
+      showDocumentation = { enable = true },
+    },
+    format = false,
+    quiet = false,
+    rulesCustomizations = {},
+    run = "onType",
+    validate = "on",
   },
 }
 

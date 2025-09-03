@@ -20,6 +20,11 @@ require("lspconfig").emmet_ls.setup(lsp_settings.emmet_ls)
 -- Enhanced JSON LSP configuration
 require("lspconfig").jsonls.setup(lsp_settings.jsonls)
 
+-- ESLint diagnostics for JS/TS
+pcall(function()
+  require("lspconfig").eslint.setup(lsp_settings.eslint)
+end)
+
 -- GLSL Analyzer configuration
 require("lspconfig").glsl_analyzer.setup(lsp_settings.glsl_analyzer)
 

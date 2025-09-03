@@ -12,6 +12,7 @@ return {
     "marksman",
     "typescript-language-server",
     "vtsls", -- Enhanced TypeScript/JavaScript LSP
+    "eslint-lsp", -- ESLint language server
     "jsonls",
     "emmet-ls",
     "glsl_analyzer", -- GLSL language server
