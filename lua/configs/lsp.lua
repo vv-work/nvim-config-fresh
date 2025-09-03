@@ -55,6 +55,15 @@ M.omnisharp = {
 
 -- Enhanced VTSLS (TypeScript/JavaScript) configuration
 M.vtsls = {
+  -- Resolve vtsls from Mason bin to avoid PATH issues
+  cmd = (function()
+    local mason_bin = vim.fn.stdpath("data") .. "/mason/bin/vtsls"
+    if vim.fn.executable(mason_bin) == 1 then
+      return { mason_bin, "--stdio" }
+    else
+      return { "vtsls", "--stdio" }
+    end
+  end)(),
   on_attach = function(client, bufnr)
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentRangeFormattingProvider = false
