@@ -132,6 +132,43 @@ return {
   	"williamboman/mason.nvim",
   	opts = require "configs.mason",
   },
+  {
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = { "williamboman/mason.nvim" },
+    config = function()
+      require("mason-lspconfig").setup({
+        automatic_installation = true,
+        ensure_installed = {
+          "vtsls",
+          "eslint",
+          "jsonls",
+          "emmet_ls",
+          "clangd",
+          "cmake",
+          "rust_analyzer",
+          "omnisharp",
+          "pyright",
+          "html",
+          "cssls",
+          "glsl_analyzer",
+        },
+      })
+    end,
+  },
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    dependencies = { "williamboman/mason.nvim" },
+    opts = function()
+      local cfg = require "configs.mason"
+      return {
+        ensure_installed = cfg.ensure_installed or {},
+        auto_update = false,
+        run_on_start = true,
+        start_delay = 3000,
+        debounce_hours = 12,
+      }
+    end,
+  },
   --
   {
   	"nvim-treesitter/nvim-treesitter",

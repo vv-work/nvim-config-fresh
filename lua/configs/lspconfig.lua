@@ -2,9 +2,6 @@ require("nvchad.configs.lspconfig").defaults()
 
 local lsp_settings = require "configs.lsp"
 
--- Enable configured LSP servers
-vim.lsp.enable(lsp_settings.servers)
-
 -- Enhanced Pyright configuration
 require("lspconfig").pyright.setup(lsp_settings.pyright)
 
@@ -36,5 +33,10 @@ require("lspconfig").cmake.setup(lsp_settings.cmake)
 
 -- Enhanced Rust Analyzer configuration
 require("lspconfig").rust_analyzer.setup(lsp_settings.rust_analyzer)
+
+-- HTML/CSS/Markdown language servers
+pcall(function() require("lspconfig").html.setup({}) end)
+pcall(function() require("lspconfig").cssls.setup({}) end)
+pcall(function() require("lspconfig").marksman.setup({}) end)
 
 -- read :h vim.lsp.config for changing options of lsp servers 
