@@ -31,8 +31,16 @@ require("lspconfig").clangd.setup(lsp_settings.clangd)
 -- CMake LSP configuration
 require("lspconfig").cmake.setup(lsp_settings.cmake)
 
+-- Swift SourceKit-LSP configuration
+pcall(function()
+  require("lspconfig").sourcekit.setup(lsp_settings.sourcekit)
+end)
+
 -- Enhanced Rust Analyzer configuration
-require("lspconfig").rust_analyzer.setup(lsp_settings.rust_analyzer)
+-- Rust LSP is managed by rustaceanvim to avoid double setup
+-- See plugin config in lua/plugins/init.lua (mrcjkb/rustaceanvim)
+-- If rustaceanvim is removed, re-enable the line below.
+-- require("lspconfig").rust_analyzer.setup(lsp_settings.rust_analyzer)
 
 -- HTML/CSS/Markdown language servers
 pcall(function() require("lspconfig").html.setup({}) end)

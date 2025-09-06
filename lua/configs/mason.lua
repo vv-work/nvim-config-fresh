@@ -59,5 +59,9 @@ return {
     "eslint_d",
     "biome", -- Fast JavaScript/TypeScript linter and formatter
     "js-debug-adapter", -- JavaScript/TypeScript debugger
+    
+    -- Swift tooling (formatting/linting). sourcekit-lsp provided by Xcode.
+    "swiftformat",
+    "swiftlint",
   }
 }

@@ -31,7 +31,8 @@ return {
     comp = { "clang-format" },
     cmake = { "cmake_format" },
     rust = { "rustfmt" },
-    toml = { "taplo" }
+    toml = { "taplo" },
+    swift = { "swiftformat", "swift_format" }
   },
 
   formatters = {

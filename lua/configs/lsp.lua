@@ -3,6 +3,7 @@ local M = {}
 
 -- List of LSP servers to enable
 M.servers = { "html", "cssls", "omnisharp", "marksman", "clangd", "vtsls", "jsonls", "emmet_ls", "glsl_analyzer", "cmake", "rust_analyzer" }
+-- Note: Swift (sourcekit) is configured below via lspconfig but not listed here
 
 -- Enhanced Pyright configuration
 M.pyright = {
@@ -222,6 +223,61 @@ M.clangd = {
     },
     offsetEncoding = { "utf-16" },
   },
+  on_attach = function(client, bufnr)
+    -- Basic LSP keymaps
+    if client.server_capabilities.hoverProvider then
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr, silent = true })
+    end
+    if client.server_capabilities.codeActionProvider then
+      vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = bufnr, silent = true, desc = 'Code Action' })
+    end
+    if client.server_capabilities.documentFormattingProvider then
+      vim.keymap.set('n', '<leader>cf', function() vim.lsp.buf.format({ async = true }) end,
+        { buffer = bufnr, silent = true, desc = 'Format' })
+    end
+
+    -- Helper: detect if CMake project
+    local function is_cmake()
+      local cwd = vim.fn.getcwd()
+      return (vim.fn.filereadable(cwd .. '/CMakeLists.txt') == 1)
+    end
+
+    -- Build current project or file
+    vim.keymap.set('n', '<leader>cb', function()
+      if is_cmake() and pcall(require, 'cmake-tools') then
+        require('cmake-tools').build()
+      else
+        local cc = (vim.fn.executable('clang') == 1) and 'clang' or 'cc'
+        local cmd = string.format('%s %s -g -O0 -Wall -Wextra -o %s', cc, vim.fn.shellescape(vim.fn.expand('%')),
+          vim.fn.shellescape(vim.fn.expand('%:r')))
+        vim.cmd('!' .. cmd)
+      end
+    end, { buffer = bufnr, silent = true, desc = 'C: Build' })
+
+    -- Run current target or file output
+    vim.keymap.set('n', '<leader>cr', function()
+      if is_cmake() and pcall(require, 'cmake-tools') then
+        require('cmake-tools').run()
+      else
+        local bin = vim.fn.expand('%:r')
+        if vim.fn.executable(bin) == 1 then
+          vim.cmd('!' .. vim.fn.shellescape(bin))
+        else
+          vim.notify('No built binary: ' .. bin .. ' (build first with <leader>cb)', vim.log.levels.WARN)
+        end
+      end
+    end, { buffer = bufnr, silent = true, desc = 'C: Run' })
+
+    -- Optional: quick tidy for current file (requires compile_commands.json for best results)
+    vim.keymap.set('n', '<leader>ct', function()
+      if vim.fn.executable('clang-tidy') == 0 then
+        vim.notify('clang-tidy not found (install via Mason)', vim.log.levels.WARN)
+        return
+      end
+      local cmd = string.format('clang-tidy %s --', vim.fn.shellescape(vim.fn.expand('%')))
+      vim.cmd('!' .. cmd)
+    end, { buffer = bufnr, silent = true, desc = 'C: clang-tidy current file' })
+  end,
 }
 
 -- CMake LSP configuration
@@ -230,6 +286,36 @@ M.cmake = {
   init_options = {
     buildDirectory = "build",
   },
+}
+
+-- Swift (SourceKit-LSP) configuration
+M.sourcekit = {
+  cmd = (function()
+    -- Prefer Xcode's sourcekit-lsp if available on PATH
+    return { "sourcekit-lsp" }
+  end)(),
+  filetypes = { "swift" },
+  root_dir = function(fname)
+    local util = require("lspconfig.util")
+    return util.root_pattern("Package.swift", ".swiftpm")(fname)
+      or util.find_git_ancestor(fname)
+      or util.path.dirname(fname)
+  end,
+  settings = {
+    -- SourceKit uses sensible defaults; keep minimal to avoid crashes
+  },
+  on_attach = function(client, bufnr)
+    if client.server_capabilities.hoverProvider then
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr, silent = true })
+    end
+    if client.server_capabilities.codeActionProvider then
+      vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = bufnr, silent = true, desc = 'Code Action' })
+    end
+    if client.server_capabilities.documentFormattingProvider then
+      vim.keymap.set('n', '<leader>cf', function() vim.lsp.buf.format({ async = true }) end,
+        { buffer = bufnr, silent = true, desc = 'Format' })
+    end
+  end,
 }
 
 -- Enhanced Rust Analyzer configuration

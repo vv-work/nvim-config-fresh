@@ -431,6 +431,8 @@ return {
       }
 
       dap.configurations.c = dap.configurations.cpp
+      -- Swift uses the same codelldb adapter
+      dap.configurations.swift = dap.configurations.cpp
     end,
     keys = {
       { "<F5>", function() require("dap").continue() end, desc = "Debug: Start/Continue" },

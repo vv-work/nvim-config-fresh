@@ -20,6 +20,7 @@ return {
     "jsonc",
     "yaml",
     "toml",
+    "ron", -- Rust Object Notation
     "vue",
     "svelte",
     "bash",
@@ -27,16 +28,19 @@ return {
     "sql",
     "cpp",
     "c",
+    "make", -- Makefile syntax
     "glsl", -- GLSL shader language
     "hlsl", -- HLSL shader language  
     "cmake", -- CMake build system
     "cuda", -- CUDA
     "rust", -- Rust language
     "go", -- Go language
+    "swift", -- Swift language
     "dockerfile", -- Docker
     "ini", -- INI files
     "gitignore" -- Git ignore files
   },
+  ensure_installed_extra = {},
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = { "markdown" }
