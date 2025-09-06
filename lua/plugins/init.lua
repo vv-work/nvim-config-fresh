@@ -143,6 +143,7 @@ return {
           "eslint",
           "jsonls",
           "emmet_ls",
+          "jdtls",
           "clangd",
           "cmake",
           "rust_analyzer",
@@ -153,6 +154,15 @@ return {
           "glsl_analyzer",
         },
       })
+    end,
+  },
+  -- Java LSP via nvim-jdtls
+  {
+    "mfussenegger/nvim-jdtls",
+    ft = { "java" },
+    config = function()
+      -- Setup handled in lua/configs/jdtls.lua (autocmd on FileType)
+      require "configs.jdtls"
     end,
   },
   {

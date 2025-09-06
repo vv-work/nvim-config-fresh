@@ -5,6 +5,7 @@ return {
     "rust-analyzer",
     "pyright",
     "omnisharp",
+    "jdtls",
     "clangd",
     "lua-language-server",
     "html-lsp",
@@ -17,13 +18,16 @@ return {
     "emmet-ls",
     "glsl_analyzer", -- GLSL language server
     "taplo", -- TOML language server
-    
+    "java-debug-adapter", -- Java DAP
+    "java-test", -- Java test runner
+
     -- Formatters
     "stylua",
     "prettier",
     "black",
     "isort",
     "clang-format",
+    "google-java-format",
     "cmake-format", -- CMake formatter
     "rustfmt", -- Rust formatter
     "taplo", -- TOML formatter

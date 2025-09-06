@@ -7,6 +7,7 @@ return {
     "html",
     "css",
     "scss",
+    "java",
     "c_sharp",
     "python",
     "markdown",

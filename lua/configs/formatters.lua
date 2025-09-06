@@ -5,6 +5,7 @@ return {
     lua = { "stylua" },
     python = { "black", "isort" },
     markdown = { "prettier" },
+    java = { "google-java-format" },
     javascript = { "biome", "prettier" },
     javascriptreact = { "biome", "prettier" },
     typescript = { "biome", "prettier" },
