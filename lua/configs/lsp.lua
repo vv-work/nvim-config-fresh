@@ -2,7 +2,7 @@
 local M = {}
 
 -- List of LSP servers to enable
-M.servers = { "html", "cssls", "omnisharp", "marksman", "clangd", "vtsls", "jsonls", "emmet_ls", "glsl_analyzer", "cmake", "rust_analyzer" }
+M.servers = { "html", "cssls", "omnisharp", "marksman", "clangd", "ccls", "vtsls", "jsonls", "emmet_ls", "glsl_analyzer", "cmake", "rust_analyzer" }
 -- Note: Swift (sourcekit) is configured below via lspconfig but not listed here
 
 -- Enhanced Pyright configuration
@@ -277,6 +277,21 @@ M.clangd = {
       local cmd = string.format('clang-tidy %s --', vim.fn.shellescape(vim.fn.expand('%')))
       vim.cmd('!' .. cmd)
     end, { buffer = bufnr, silent = true, desc = 'C: clang-tidy current file' })
+  end,
+}
+
+-- ccls as an alternative LSP for Metal (limited C++-like support)
+M.ccls = {
+  filetypes = { "metal" },
+  init_options = {
+    cache = { directory = ".ccls-cache" },
+  },
+  root_dir = function(fname)
+    return require("lspconfig.util").root_pattern(
+      "compile_commands.json",
+      ".ccls",
+      ".git"
+    )(fname)
   end,
 }
 

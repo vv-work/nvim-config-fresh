@@ -2,6 +2,14 @@ require("nvchad.configs.lspconfig").defaults()
 
 local lsp_settings = require "configs.lsp"
 
+-- Prefer ccls for Metal if available; prevent clangd from also attaching to metal
+if vim.fn.executable("ccls") == 1 and lsp_settings.clangd and lsp_settings.clangd.filetypes then
+  local filtered = vim.tbl_filter(function(ft)
+    return ft ~= "metal"
+  end, lsp_settings.clangd.filetypes)
+  lsp_settings.clangd.filetypes = filtered
+end
+
 -- Enhanced Pyright configuration
 require("lspconfig").pyright.setup(lsp_settings.pyright)
 
@@ -27,6 +35,17 @@ require("lspconfig").glsl_analyzer.setup(lsp_settings.glsl_analyzer)
 
 -- Enhanced clangd configuration for C++
 require("lspconfig").clangd.setup(lsp_settings.clangd)
+
+-- ccls for Metal-only (as an alternative to clangd)
+if vim.fn.executable("ccls") == 1 then
+  pcall(function()
+    require("lspconfig").ccls.setup(lsp_settings.ccls)
+  end)
+else
+  vim.schedule(function()
+    vim.notify("ccls not found; using clangd for Metal", vim.log.levels.INFO)
+  end)
+end
 
 -- CMake LSP configuration
 require("lspconfig").cmake.setup(lsp_settings.cmake)

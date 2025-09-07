@@ -11,10 +11,10 @@ return {
     },
   },
 
-  -- LuaRocks integration (requires system `luarocks`)
+  -- LuaRocks integration (hererocks bootstraps local Lua + luarocks)
   rocks = {
     enabled = true,
-    hererocks = false,
+    hererocks = true,
   },
 
   performance = {
