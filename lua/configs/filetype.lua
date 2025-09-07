@@ -74,6 +74,9 @@ vim.filetype.add({
     cu = "cuda",
     cuh = "cuda",
     
+    -- Metal shading language
+    metal = "metal",
+    
     -- CMake files
     cmake = "cmake",
   },
@@ -120,6 +123,13 @@ vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"}, {
     vim.bo.commentstring = "// %s"
   end,
 })
+
+-- Treesitter: reuse C++ parser for Metal
+pcall(function()
+  if vim.treesitter and vim.treesitter.language and vim.treesitter.language.register then
+    vim.treesitter.language.register("cpp", "metal")
+  end
+end)
 
 -- Additional safety: override any FileType autocmd that might interfere
 vim.api.nvim_create_autocmd("FileType", {

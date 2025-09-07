@@ -11,6 +11,12 @@ return {
     },
   },
 
+  -- LuaRocks integration (requires system `luarocks`)
+  rocks = {
+    enabled = true,
+    hererocks = false,
+  },
+
   performance = {
     rtp = {
       disabled_plugins = {

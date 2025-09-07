@@ -203,7 +203,7 @@ M.clangd = {
     completeUnimported = true,
     clangdFileStatus = true,
   },
-  filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+  filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto", "metal" },
   root_dir = function(fname)
     return require("lspconfig.util").root_pattern(
       ".clangd",
