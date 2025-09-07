@@ -168,6 +168,25 @@ M.jsonls = {
   },
 }
 
+-- Bash language server (bash-language-server)
+M.bashls = {
+  filetypes = { "sh", "bash" },
+  cmd = { "bash-language-server", "start" },
+}
+
+-- Fish shell language server (fish-lsp)
+M.fish_lsp = {
+  filetypes = { "fish" },
+  -- Mason installs fish-lsp as 'fish-lsp'; fallback to PATH
+  cmd = (function()
+    local bin = vim.fn.stdpath("data") .. "/mason/bin/fish-lsp"
+    if vim.fn.executable(bin) == 1 then
+      return { bin, "start" }
+    end
+    return { "fish-lsp", "start" }
+  end)(),
+}
+
 -- GLSL Analyzer configuration
 M.glsl_analyzer = {
   filetypes = { "glsl", "vert", "frag", "geom", "tesc", "tese", "comp" },

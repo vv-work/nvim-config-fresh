@@ -25,6 +25,16 @@ require("lspconfig").emmet_ls.setup(lsp_settings.emmet_ls)
 -- Enhanced JSON LSP configuration
 require("lspconfig").jsonls.setup(lsp_settings.jsonls)
 
+-- Bash LSP
+pcall(function()
+  require("lspconfig").bashls.setup(lsp_settings.bashls)
+end)
+
+-- Fish shell LSP
+pcall(function()
+  require("lspconfig").fish_lsp.setup(lsp_settings.fish_lsp)
+end)
+
 -- ESLint diagnostics for JS/TS
 pcall(function()
   require("lspconfig").eslint.setup(lsp_settings.eslint)

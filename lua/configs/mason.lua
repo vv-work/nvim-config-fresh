@@ -17,6 +17,8 @@ return {
     "jsonls",
     "emmet-ls",
     "glsl_analyzer", -- GLSL language server
+    "bash-language-server", -- Bash LSP
+    "fish-lsp", -- Fish shell LSP
     "taplo", -- TOML language server
     "java-debug-adapter", -- Java DAP
     "java-test", -- Java test runner
@@ -27,6 +29,7 @@ return {
     "black",
     "isort",
     "clang-format",
+    "shfmt", -- Shell formatter (sh/bash)
     "google-java-format",
     "cmake-format", -- CMake formatter
     "rustfmt", -- Rust formatter
@@ -51,6 +54,7 @@ return {
     "autopep8",
     "cppcheck",
     "clang-tidy", -- C++ static analysis
+    "shellcheck", -- Shell diagnostics
     "cmake-language-server", -- CMake support
     "codelldb", -- C++ and Rust debugger
     "gdb", -- GNU debugger

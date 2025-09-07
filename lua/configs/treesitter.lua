@@ -30,6 +30,7 @@ return {
     "vue",
     "svelte",
     "bash",
+    "fish",
     "regex",
     "sql",
     "cpp",

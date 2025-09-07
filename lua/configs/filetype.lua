@@ -76,6 +76,9 @@ vim.filetype.add({
     
     -- Metal shading language
     metal = "metal",
+
+    -- Fish shell scripts
+    fish = "fish",
     
     -- CMake files
     cmake = "cmake",

@@ -319,14 +319,40 @@ return {
         dapui.close()
       end
 
-      -- C++ configuration for codelldb
+      -- C++/C/Rust/Swift adapter (codelldb) with robust Mason resolution
+      local function resolve_codelldb()
+        local ok, registry = pcall(require, "mason-registry")
+        if ok then
+          local ok_pkg, pkg = pcall(registry.get_package, "codelldb")
+          if ok_pkg and pkg:is_installed() then
+            local install = pkg:get_install_path()
+            local adapter_path = install .. "/extension/adapter/codelldb"
+            if vim.fn.executable(adapter_path) == 1 then
+              return adapter_path
+            end
+          end
+        end
+        local fallback = vim.fn.stdpath("data") .. "/mason/bin/codelldb"
+        return vim.fn.expand(fallback)
+      end
+
+      local codelldb_cmd = resolve_codelldb()
+      if vim.fn.executable(codelldb_cmd) == 0 then
+        vim.schedule(function()
+          vim.notify(
+            "codelldb adapter not found or not executable: " .. codelldb_cmd .. "\nInstall via :Mason (codelldb)",
+            vim.log.levels.WARN
+          )
+        end)
+      end
+
       dap.adapters.codelldb = {
         type = "server",
         port = "${port}",
         executable = {
-          command = vim.fn.stdpath("data") .. "/mason/bin/codelldb",
+          command = codelldb_cmd,
           args = { "--port", "${port}" },
-        }
+        },
       }
 
       dap.configurations.cpp = {
