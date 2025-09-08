@@ -532,6 +532,28 @@ return {
     lazy = false,
     ft = { "rust" },
     config = function()
+      -- Resolve codelldb via Mason registry if available
+      local resolved_adapter
+      pcall(function()
+        local registry = require("mason-registry")
+        local pkg = registry.get_package("codelldb")
+        if pkg and pkg:is_installed() then
+          local install = pkg:get_install_path()
+          local codelldb_path = install .. "/extension/adapter/codelldb"
+          local liblldb_base = install .. "/extension/lldb/lib/liblldb"
+          if vim.fn.executable(codelldb_path) == 1 then
+            resolved_adapter = require("rustaceanvim.config").get_codelldb_adapter(codelldb_path, liblldb_base)
+          end
+        end
+      end)
+      if not resolved_adapter then
+        -- Fallback to stdpath; may require Mason install
+        resolved_adapter = require("rustaceanvim.config").get_codelldb_adapter(
+          vim.fn.stdpath("data") .. "/mason/bin/codelldb",
+          vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/lldb/lib/liblldb"
+        )
+      end
+
       vim.g.rustaceanvim = {
         -- Plugin configuration
         tools = {
@@ -641,12 +663,7 @@ return {
           },
         },
         -- DAP configuration
-        dap = {
-          adapter = require("rustaceanvim.config").get_codelldb_adapter(
-            vim.fn.stdpath("data") .. "/mason/bin/codelldb",
-            vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/lldb/lib/liblldb"
-          ),
-        },
+        dap = { adapter = resolved_adapter },
       }
     end,
   },
@@ -877,27 +894,28 @@ return {
     end,
   },
   
-  -- Claude Code integration
+  -- OpenAI Chat (Codex replacement) via ChatGPT.nvim
   {
-    "greggh/claude-code.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    "jackMort/ChatGPT.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      "MunifTanjim/nui.nvim",
+    },
     config = function()
-      require("claude-code").setup({
-        -- Toggle Claude Code with this keymap
-        toggle_key = "<leader>ai",
-        -- Position of Claude Code window
-        position = "right",
-        -- Size of Claude Code window
-        size = 80,
-        -- Auto reload files when Claude Code modifies them
-        auto_reload = true,
-        -- Command line arguments to pass to claude-code
-        claude_args = {},
+      require("chatgpt").setup({
+        -- Read API key from environment
+        api_key_cmd = "echo $OPENAI_API_KEY",
+        openai_params = {
+          -- Codex is deprecated; use modern OpenAI models
+          model = "gpt-4o-mini",
+        },
       })
     end,
     keys = {
-      { "<leader>ai", function() require("claude-code").toggle() end, desc = "Toggle Claude Code" },
-      { "<leader>an", function() require("claude-code").new_conversation() end, desc = "New Claude conversation" },
+      { "<leader>ai", "<cmd>ChatGPT<cr>", desc = "OpenAI: Chat" },
+      { "<leader>an", "<cmd>ChatGPTEditWithInstructions<cr>", mode = { "n", "v" }, desc = "OpenAI: Edit with Instructions" },
     },
   },
 

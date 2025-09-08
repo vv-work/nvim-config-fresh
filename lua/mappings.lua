@@ -28,9 +28,9 @@ map("i", "jk", "<ESC>")
 -- <C-g>S<char> - Add surroundings on new lines
 
 -- AI Assistant Keymaps
--- Claude Code Integration:
--- <leader>ai - Toggle Claude Code window
--- <leader>an - Start new Claude conversation
+-- OpenAI Chat (via ChatGPT.nvim):
+-- <leader>ai - Open Chat window
+-- <leader>an - Edit with instructions (normal/visual)
 
 -- Completion Keymaps:
 -- BLINK.CMP (completion menu):
