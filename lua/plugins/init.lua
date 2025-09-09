@@ -914,8 +914,8 @@ return {
       })
     end,
     keys = {
-      { "<leader>ai", "<cmd>ChatGPT<cr>", desc = "OpenAI: Chat" },
-      { "<leader>an", "<cmd>ChatGPTEditWithInstructions<cr>", mode = { "n", "v" }, desc = "OpenAI: Edit with Instructions" },
+      { "<leader>ac", "<cmd>ChatGPT<cr>", desc = "OpenAI: Chat" },
+      { "<leader>ae", "<cmd>ChatGPTEditWithInstructions<cr>", mode = { "n", "v" }, desc = "OpenAI: Edit with Instructions" },
     },
   },
 

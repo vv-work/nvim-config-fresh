@@ -28,9 +28,9 @@ map("i", "jk", "<ESC>")
 -- <C-g>S<char> - Add surroundings on new lines
 
 -- AI Assistant Keymaps
--- OpenAI Chat (via ChatGPT.nvim):
--- <leader>ai - Open Chat window
--- <leader>an - Edit with instructions (normal/visual)
+-- OpenAI CLI (Aider) in terminal split:
+map("n", "<leader>ai", function() require("configs.openai_cli").toggle() end, { desc = "OpenAI CLI (Aider): Toggle" })
+map("n", "<leader>an", function() require("configs.openai_cli").new_session() end, { desc = "OpenAI CLI (Aider): New Session" })
 
 -- Completion Keymaps:
 -- BLINK.CMP (completion menu):
