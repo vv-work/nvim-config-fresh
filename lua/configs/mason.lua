@@ -67,5 +67,9 @@ return {
     -- Swift tooling (formatting/linting). sourcekit-lsp provided by Xcode.
     "swiftformat",
     "swiftlint",
+    
+    -- LaTeX tooling
+    "texlab", -- LaTeX LSP
+    "chktex", -- LaTeX linter
   }
 }

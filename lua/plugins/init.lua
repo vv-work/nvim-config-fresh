@@ -152,6 +152,7 @@ return {
           "html",
           "cssls",
           "glsl_analyzer",
+          "texlab",
         },
       })
     end,
@@ -217,6 +218,19 @@ return {
     "b0o/schemastore.nvim",
     lazy = true,
     version = false,
+  },
+
+  -- LaTeX: vimtex for editing/compiling
+  {
+    "lervag/vimtex",
+    ft = { "tex", "plaintex", "latex" },
+    init = function()
+      -- Set before plugin loads
+      vim.g.tex_flavor = "latex"
+    end,
+    config = function()
+      require "configs.vimtex"
+    end,
   },
 
   {

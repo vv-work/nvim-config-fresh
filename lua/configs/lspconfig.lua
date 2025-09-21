@@ -60,6 +60,11 @@ end
 -- CMake LSP configuration
 require("lspconfig").cmake.setup(lsp_settings.cmake)
 
+-- LaTeX (texlab) configuration
+pcall(function()
+  require("lspconfig").texlab.setup(lsp_settings.texlab)
+end)
+
 -- Swift SourceKit-LSP configuration
 pcall(function()
   require("lspconfig").sourcekit.setup(lsp_settings.sourcekit)

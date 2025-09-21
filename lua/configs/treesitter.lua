@@ -1,8 +1,8 @@
 -- Treesitter parser and configuration settings
 local ignore = {}
 if vim.fn.executable("tree-sitter") == 0 then
-  -- Skip Swift install when tree-sitter CLI is missing to avoid errors
-  ignore = { "swift" }
+  -- Skip languages that require generation from grammar when tree-sitter CLI is missing
+  ignore = { "swift", "latex" }
 end
 
 return {
@@ -45,7 +45,8 @@ return {
     "swift", -- Swift language
     "dockerfile", -- Docker
     "ini", -- INI files
-    "gitignore" -- Git ignore files
+    "gitignore", -- Git ignore files
+    "latex" -- LaTeX syntax
   },
   ignore_install = ignore,
   ensure_installed_extra = {},

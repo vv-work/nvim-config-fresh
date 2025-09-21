@@ -2,7 +2,7 @@
 local M = {}
 
 -- List of LSP servers to enable
-M.servers = { "html", "cssls", "omnisharp", "marksman", "clangd", "ccls", "vtsls", "jsonls", "emmet_ls", "glsl_analyzer", "cmake", "rust_analyzer" }
+M.servers = { "html", "cssls", "omnisharp", "marksman", "clangd", "ccls", "vtsls", "jsonls", "emmet_ls", "glsl_analyzer", "cmake", "rust_analyzer", "texlab" }
 -- Note: Swift (sourcekit) is configured below via lspconfig but not listed here
 
 -- Enhanced Pyright configuration
@@ -143,6 +143,36 @@ M.eslint = {
     rulesCustomizations = {},
     run = "onType",
     validate = "on",
+  },
+}
+
+-- Texlab LSP for LaTeX
+M.texlab = {
+  filetypes = { "tex", "plaintex", "latex" },
+  settings = {
+    texlab = {
+      build = {
+        executable = "latexmk",
+        args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "-file-line-error", "%f" },
+        onSave = true,
+        forwardSearchAfter = true,
+      },
+      forwardSearch = (function()
+        -- Use Skim on macOS for forward search if available
+        if vim.fn.has("mac") == 1 then
+          return {
+            executable = "/Applications/Skim.app/Contents/SharedSupport/displayline",
+            args = { "-r", "-b", "%l", "%p", "%f" },
+          }
+        end
+        -- Fallback: generic PDF viewer (no forward search)
+        return { executable = "", args = {} }
+      end)(),
+      chktex = { onOpenAndSave = true, onEdit = false },
+      latex = {
+        bibtexFormatter = "texlab",
+      },
+    },
   },
 }
 
