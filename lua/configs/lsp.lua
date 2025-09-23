@@ -2,7 +2,7 @@
 local M = {}
 
 -- List of LSP servers to enable
-M.servers = { "html", "cssls", "omnisharp", "marksman", "clangd", "ccls", "vtsls", "jsonls", "emmet_ls", "glsl_analyzer", "cmake", "rust_analyzer", "texlab" }
+M.servers = { "html", "cssls", "omnisharp", "marksman", "clangd", "ccls", "vtsls", "jsonls", "emmet_ls", "glsl_analyzer", "cmake", "rust_analyzer", "texlab", "mdx_analyzer" }
 -- Note: Swift (sourcekit) is configured below via lspconfig but not listed here
 
 -- Enhanced Pyright configuration
@@ -131,6 +131,7 @@ M.eslint = {
     "typescriptreact",
     "vue",
     "svelte",
+    "mdx",
   },
   settings = {
     workingDirectory = { mode = "auto" },
@@ -144,6 +145,15 @@ M.eslint = {
     run = "onType",
     validate = "on",
   },
+}
+
+-- MDX language server (mdx-analyzer)
+M.mdx_analyzer = {
+  filetypes = { "mdx" },
+  -- Default settings are fine; mdx-analyzer primarily offers diagnostics
+  root_dir = function(fname)
+    return require("lspconfig.util").root_pattern("package.json", ".git")(fname)
+  end,
 }
 
 -- Texlab LSP for LaTeX

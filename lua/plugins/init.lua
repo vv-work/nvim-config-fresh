@@ -153,6 +153,7 @@ return {
           "cssls",
           "glsl_analyzer",
           "texlab",
+          "mdx_analyzer",
         },
       })
     end,
@@ -190,7 +191,7 @@ return {
   {
     "iamcco/markdown-preview.nvim",
     cmd = keymaps.markdown_commands,
-    ft = { "markdown" },
+    ft = { "markdown", "mdx" },
     keys = {
       { "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>", desc = "Markdown: Preview Toggle" },
     },
@@ -249,6 +250,7 @@ return {
       "xml",
       "php",
       "markdown",
+      "mdx",
       "astro",
       "glimmer",
       "handlebars",
@@ -257,6 +259,12 @@ return {
     config = function()
       require("nvim-ts-autotag").setup()
     end,
+  },
+
+  -- MDX filetype detection and basic syntax (helps ensure 'mdx' ft)
+  {
+    "jxnblk/vim-mdx-js",
+    ft = { "mdx" },
   },
 
   {

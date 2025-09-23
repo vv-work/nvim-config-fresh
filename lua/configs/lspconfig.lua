@@ -81,4 +81,9 @@ pcall(function() require("lspconfig").html.setup({}) end)
 pcall(function() require("lspconfig").cssls.setup({}) end)
 pcall(function() require("lspconfig").marksman.setup({}) end)
 
+-- MDX Analyzer (for .mdx files)
+pcall(function()
+  require("lspconfig").mdx_analyzer.setup(lsp_settings.mdx_analyzer)
+end)
+
 -- read :h vim.lsp.config for changing options of lsp servers 

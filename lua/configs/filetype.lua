@@ -77,6 +77,9 @@ vim.filetype.add({
     -- Metal shading language
     metal = "metal",
 
+    -- MDX (MD + JSX)
+    mdx = "mdx",
+
     -- Fish shell scripts
     fish = "fish",
     

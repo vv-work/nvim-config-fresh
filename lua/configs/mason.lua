@@ -11,6 +11,7 @@ return {
     "html-lsp",
     "css-lsp",
     "marksman",
+    "mdx-analyzer",
     "typescript-language-server",
     "vtsls", -- Enhanced TypeScript/JavaScript LSP
     "eslint-lsp", -- ESLint language server
