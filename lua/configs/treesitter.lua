@@ -18,7 +18,6 @@ return {
     "python",
     "markdown",
     "markdown_inline",
-    "mdx",
     "javascript",
     "typescript",
     "tsx",

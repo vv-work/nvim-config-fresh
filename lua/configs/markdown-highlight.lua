@@ -5,6 +5,11 @@ local M = {}
 
 -- Function to set up markdown code block language aliases
 M.setup = function()
+  -- Use markdown Treesitter parser for MDX files (no official mdx parser)
+  pcall(function()
+    vim.treesitter.language.register("markdown", "mdx")
+  end)
+
   -- Map csharp and c# aliases to c_sharp parser
   vim.treesitter.language.register("c_sharp", {"csharp", "c#"})
   
