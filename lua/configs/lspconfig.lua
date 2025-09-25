@@ -1,6 +1,7 @@
 require("nvchad.configs.lspconfig").defaults()
 
 local lsp_settings = require "configs.lsp"
+local v11 = require "configs.lsp_v11"
 
 -- Prefer ccls for Metal if available; prevent clangd from also attaching to metal
 if vim.fn.executable("ccls") == 1 and lsp_settings.clangd and lsp_settings.clangd.filetypes then
@@ -10,80 +11,32 @@ if vim.fn.executable("ccls") == 1 and lsp_settings.clangd and lsp_settings.clang
   lsp_settings.clangd.filetypes = filtered
 end
 
--- Enhanced Pyright configuration
-require("lspconfig").pyright.setup(lsp_settings.pyright)
-
--- Enhanced Omnisharp configuration with Roslyn support
-require("lspconfig").omnisharp.setup(lsp_settings.omnisharp)
-
--- Enhanced VTSLS TypeScript/JavaScript configuration
-require("lspconfig").vtsls.setup(lsp_settings.vtsls)
-
--- Emmet LSP configuration
-require("lspconfig").emmet_ls.setup(lsp_settings.emmet_ls)
-
--- Enhanced JSON LSP configuration
-require("lspconfig").jsonls.setup(lsp_settings.jsonls)
-
--- Bash LSP
-pcall(function()
-  require("lspconfig").bashls.setup(lsp_settings.bashls)
-end)
-
--- Fish shell LSP
-pcall(function()
-  require("lspconfig").fish_lsp.setup(lsp_settings.fish_lsp)
-end)
-
--- ESLint diagnostics for JS/TS
-pcall(function()
-  require("lspconfig").eslint.setup(lsp_settings.eslint)
-end)
-
--- GLSL Analyzer configuration
-require("lspconfig").glsl_analyzer.setup(lsp_settings.glsl_analyzer)
-
--- Enhanced clangd configuration for C++
-require("lspconfig").clangd.setup(lsp_settings.clangd)
+-- Configure servers using the 0.11 API (vim.lsp.start)
+v11.setup("pyright", lsp_settings.pyright)
+v11.setup("omnisharp", lsp_settings.omnisharp)
+v11.setup("vtsls", lsp_settings.vtsls)
+v11.setup("emmet_ls", lsp_settings.emmet_ls)
+v11.setup("jsonls", lsp_settings.jsonls)
+v11.setup("bashls", lsp_settings.bashls)
+v11.setup("fish_lsp", lsp_settings.fish_lsp)
+v11.setup("eslint", lsp_settings.eslint)
+v11.setup("glsl_analyzer", lsp_settings.glsl_analyzer)
+v11.setup("clangd", lsp_settings.clangd)
+v11.setup("cmake", lsp_settings.cmake)
+v11.setup("texlab", lsp_settings.texlab)
+v11.setup("sourcekit", lsp_settings.sourcekit)
+v11.setup("html", {})
+v11.setup("cssls", {})
+v11.setup("marksman", {})
+v11.setup("mdx_analyzer", lsp_settings.mdx_analyzer)
 
 -- ccls for Metal-only (as an alternative to clangd)
 if vim.fn.executable("ccls") == 1 then
-  pcall(function()
-    require("lspconfig").ccls.setup(lsp_settings.ccls)
-  end)
+  v11.setup("ccls", lsp_settings.ccls)
 else
   vim.schedule(function()
     vim.notify("ccls not found; using clangd for Metal", vim.log.levels.INFO)
   end)
 end
 
--- CMake LSP configuration
-require("lspconfig").cmake.setup(lsp_settings.cmake)
-
--- LaTeX (texlab) configuration
-pcall(function()
-  require("lspconfig").texlab.setup(lsp_settings.texlab)
-end)
-
--- Swift SourceKit-LSP configuration
-pcall(function()
-  require("lspconfig").sourcekit.setup(lsp_settings.sourcekit)
-end)
-
--- Enhanced Rust Analyzer configuration
--- Rust LSP is managed by rustaceanvim to avoid double setup
--- See plugin config in lua/plugins/init.lua (mrcjkb/rustaceanvim)
--- If rustaceanvim is removed, re-enable the line below.
--- require("lspconfig").rust_analyzer.setup(lsp_settings.rust_analyzer)
-
--- HTML/CSS/Markdown language servers
-pcall(function() require("lspconfig").html.setup({}) end)
-pcall(function() require("lspconfig").cssls.setup({}) end)
-pcall(function() require("lspconfig").marksman.setup({}) end)
-
--- MDX Analyzer (for .mdx files)
-pcall(function()
-  require("lspconfig").mdx_analyzer.setup(lsp_settings.mdx_analyzer)
-end)
-
--- read :h vim.lsp.config for changing options of lsp servers 
+-- read :h lspconfig-nvim-0.11 for details on vim.lsp.config usage

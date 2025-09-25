@@ -48,8 +48,6 @@ return {
         suggestion = {
           enabled = true,
           auto_trigger = true,
-          accept = false, -- We'll handle Tab manually below
-          dismiss = false,
           debounce = 75,
           keymap = {
             accept = "<Tab>", -- Tab to accept suggestion
@@ -273,6 +271,21 @@ return {
       { "<leader>S", function() require("spectre").open() end, desc = "Replace in files (Spectre)" },
     },
     opts = {},
+  },
+
+  -- Code screenshots (copy/save selected code as an image)
+  {
+    "mistricky/codesnap.nvim",
+    build = "make build_generator",
+    keys = {
+      { "<leader>cs", "<cmd>CodeSnap<cr>",  mode = { "v" }, desc = "CodeSnap: Copy selection" },
+      { "<leader>cS", "<cmd>CodeSnapSave<cr>", mode = { "v" }, desc = "CodeSnap: Save selection" },
+      { "<leader>cc", "<cmd>CodeSnapCopyLast<cr>", mode = { "n" }, desc = "CodeSnap: Copy last image" },
+    },
+    config = function()
+      -- Minimal setup; defaults are sensible. Configure in lua/configs/codesnap.lua
+      require "configs.codesnap"
+    end,
   },
 
   -- Shader language support
