@@ -13,6 +13,8 @@ end
 codesnap.setup({
   -- Defaults are good; set a safe save path.
   save_path = save_dir,
+  -- Set custom watermark text
+  watermark = "#100d2Meta by Julius Paramono",
   -- You can tweak other options later: bg_theme, watermark, has_breadcrumbs, etc.
 })
 
