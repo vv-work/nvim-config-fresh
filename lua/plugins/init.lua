@@ -359,14 +359,23 @@ return {
         local ok, registry = pcall(require, "mason-registry")
         if ok then
           local ok_pkg, pkg = pcall(registry.get_package, "codelldb")
-          if ok_pkg and pkg:is_installed() then
-            local install = pkg:get_install_path()
-            local adapter_path = install .. "/extension/adapter/codelldb"
-            if vim.fn.executable(adapter_path) == 1 then
-              return adapter_path
+          if ok_pkg and pkg and pkg.is_installed and pkg:is_installed() then
+            -- Mason API compatibility: try method first, then field
+            local install
+            if type(pkg.get_install_path) == "function" then
+              install = pkg:get_install_path()
+            elseif type(pkg.install_path) == "string" then
+              install = pkg.install_path
+            end
+            if install and #install > 0 then
+              local adapter_path = install .. "/extension/adapter/codelldb"
+              if vim.fn.executable(adapter_path) == 1 then
+                return adapter_path
+              end
             end
           end
         end
+        -- Fallback to Mason shim in bin
         local fallback = vim.fn.stdpath("data") .. "/mason/bin/codelldb"
         return vim.fn.expand(fallback)
       end
@@ -572,12 +581,21 @@ return {
       pcall(function()
         local registry = require("mason-registry")
         local pkg = registry.get_package("codelldb")
-        if pkg and pkg:is_installed() then
-          local install = pkg:get_install_path()
-          local codelldb_path = install .. "/extension/adapter/codelldb"
-          local liblldb_base = install .. "/extension/lldb/lib/liblldb"
-          if vim.fn.executable(codelldb_path) == 1 then
-            resolved_adapter = require("rustaceanvim.config").get_codelldb_adapter(codelldb_path, liblldb_base)
+        if pkg and pkg.is_installed and pkg:is_installed() then
+          -- Mason API compatibility: method or field
+          local install
+          if type(pkg.get_install_path) == "function" then
+            install = pkg:get_install_path()
+          elseif type(pkg.install_path) == "string" then
+            install = pkg.install_path
+          end
+          if install and #install > 0 then
+            local codelldb_path = install .. "/extension/adapter/codelldb"
+            -- liblldb path without extension as expected by rustaceanvim helper
+            local liblldb_base = install .. "/extension/lldb/lib/liblldb"
+            if vim.fn.executable(codelldb_path) == 1 then
+              resolved_adapter = require("rustaceanvim.config").get_codelldb_adapter(codelldb_path, liblldb_base)
+            end
           end
         end
       end)
