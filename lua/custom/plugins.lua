@@ -11,7 +11,8 @@ return {
     lazy = false,
   },
   {
-    "github/copilot.vim", lazy = false,
+    -- Removed to avoid conflicts with copilot.lua + copilot-cmp
+    -- "github/copilot.vim",
   },
 
   -- Catppuccin theme (Mocha flavor)
