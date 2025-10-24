@@ -34,53 +34,42 @@ return {
       cmd = keymaps.tmux_commands,
       keys = keymaps.tmux_navigator,
     },
-  -- GitHub Copilot with better integration
+  -- GitHub Copilot (inline + menu)
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
+    -- Load on first insert; keep disabled in Telescope prompt buffers
     event = "InsertEnter",
     config = function()
       require("copilot").setup({
-        panel = {
-          enabled = false, -- Disable to avoid conflicts with blink.cmp
-          auto_refresh = false,
-        },
+        panel = { enabled = false },
+        -- Enable inline ghost text with custom keymaps
         suggestion = {
           enabled = true,
           auto_trigger = true,
           debounce = 75,
           keymap = {
-            accept = "<Tab>", -- Tab to accept suggestion
-            accept_word = "<C-]>", -- Ctrl+] to accept one word
+            accept = "<Tab>",        -- accept full phrase
+            accept_word = "<C-]>",   -- accept one word
             accept_line = false,
-            next = "<C-n>", -- Ctrl+n for next suggestion  
-            prev = "<C-p>", -- Ctrl+p for previous suggestion
-            dismiss = "<C-e>", -- Ctrl+e to dismiss
+            next = "<C-n>",          -- next suggestion
+            prev = "<C-p>",          -- previous suggestion
+            dismiss = "<C-e>",
           },
         },
+        -- Enable for all filetypes (including markdown); disable in prompts
         filetypes = {
-          yaml = true,
-          markdown = true,
-          help = false,
-          gitcommit = true,
-          gitrebase = false,
-          hgcommit = false,
-          svn = false,
-          cvs = false,
-          [".."] = false,
+          ["*"] = true,
+          TelescopePrompt = false,
         },
-        copilot_node_command = "node", -- Use Node.js binary
-        server_opts_overrides = {},
       })
     end,
   },
-  
-  -- Copilot integration for blink.cmp
+
+  -- Copilot integration for completion menu (blink.cmp source)
   {
     "zbirenbaum/copilot-cmp",
-    dependencies = {
-      "zbirenbaum/copilot.lua",
-    },
+    dependencies = { "zbirenbaum/copilot.lua" },
     config = function()
       require("copilot_cmp").setup()
     end,
@@ -919,14 +908,15 @@ return {
     end,
   },
 
-  -- Enhanced blink.cmp with Copilot integration
-  { 
+  -- Blink.cmp with Copilot source enabled and Tab freed for Copilot inline
+  {
     import = "nvchad.blink.lazyspec",
     opts = function(_, opts)
       opts.sources = opts.sources or {}
       opts.sources.default = opts.sources.default or { "lsp", "path", "snippets", "buffer" }
+      -- Add Copilot as a completion source
       table.insert(opts.sources.default, "copilot")
-      
+
       opts.sources.providers = opts.sources.providers or {}
       opts.sources.providers.copilot = {
         name = "copilot",
@@ -934,15 +924,12 @@ return {
         score_offset = 100,
         async = true,
       }
-      
-      -- Configure keymaps to use Enter for blink.cmp, leave Tab for Copilot
+
+      -- Use Enter for menu accept, free Tab/Shift-Tab for Copilot inline
       opts.keymap = opts.keymap or {}
       opts.keymap["<CR>"] = { "accept", "fallback" }
-      opts.keymap["<Tab>"] = { "fallback" } -- Let Tab go to Copilot
-      opts.keymap["<S-Tab>"] = { "fallback" } -- Remove Shift+Tab from blink too
-      opts.keymap["<Up>"] = { "select_prev", "fallback" }
-      opts.keymap["<Down>"] = { "select_next", "fallback" }
-      
+      opts.keymap["<Tab>"] = nil
+      opts.keymap["<S-Tab>"] = nil
       return opts
     end,
   },
